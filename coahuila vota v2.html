@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COAHUILA VOTA — Datos electorales sin filtro</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+:root{
+  --black:#0A0A0A;--paper:#F0EDE6;--red:#FF1A1A;--yellow:#FFE000;
+  --cyan:#00FFCC;--white:#FAFAFA;--grey:#666;--dg:#1A1A1A;--ink:#111;
+  --punk:'Bebas Neue',sans-serif;--body:'Space Grotesk',sans-serif;
+  --mono:'Courier Prime',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:var(--body);overflow-x:hidden;cursor:crosshair}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.35}
+#progress{position:fixed;top:0;left:0;height:3px;background:var(--red);width:0%;z-index:1000;box-shadow:0 0 10px var(--red);transition:width .1s linear}
+nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;justify-content:space-between;align-items:center;padding:14px 40px;mix-blend-mode:difference}
+.nav-logo{font-family:var(--punk);font-size:16px;letter-spacing:.2em;color:var(--white)}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--white);text-decoration:none;opacity:.5;transition:opacity .2s}
+.nav-links a:hover{opacity:1}
+/* HERO */
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden;background:var(--black);padding:80px 40px}
+.hero-noise{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0,transparent 3px,rgba(255,26,26,.025) 3px,rgba(255,26,26,.025) 4px),repeating-linear-gradient(90deg,transparent 0,transparent 60px,rgba(255,255,255,.015) 60px,rgba(255,255,255,.015) 61px);pointer-events:none}
+.hero-stamp{font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--red);border:1px solid var(--red);padding:4px 12px;margin-bottom:28px;display:inline-block;transform:rotate(-1deg)}
+#hero h1{font-family:var(--punk);font-size:clamp(60px,11vw,150px);line-height:.92;letter-spacing:-.02em;color:var(--white);position:relative;z-index:2}
+#hero h1 .red{color:var(--red)}
+#hero h1 .yellow{color:var(--yellow)}
+#hero h1 .outline{-webkit-text-stroke:2px var(--white);color:transparent}
+.hero-sub{font-size:15px;font-weight:300;color:rgba(250,250,250,.5);max-width:480px;margin:24px auto 0;line-height:1.6}
+.hero-sub strong{color:var(--yellow);font-weight:500}
+.hero-scroll{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey);animation:blink 2s infinite}
+.scroll-arrow{width:1px;height:36px;background:linear-gradient(to bottom,var(--grey),transparent)}
+@keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
+.glitch-num{position:relative;display:inline-block}
+.glitch-num::before,.glitch-num::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%}
+.glitch-num::before{color:var(--red);animation:g1 3.5s infinite;clip-path:polygon(0 30%,100% 30%,100% 60%,0 60%)}
+.glitch-num::after{color:var(--cyan);animation:g2 3.5s infinite;clip-path:polygon(0 65%,100% 65%,100% 80%,0 80%)}
+@keyframes g1{0%,94%,100%{transform:none;opacity:0}95%{transform:translateX(-3px);opacity:.8}97%{transform:translateX(3px);opacity:.8}}
+@keyframes g2{0%,96%,100%{transform:none;opacity:0}97%{transform:translateX(4px);opacity:.8}99%{transform:translateX(-4px);opacity:.8}}
+/* SECTIONS */
+section{min-height:100vh;padding:120px 5vw 80px;position:relative;display:flex;flex-direction:column;justify-content:center}
+.s-num{font-family:var(--mono);font-size:10px;letter-spacing:.25em;color:var(--red);margin-bottom:14px;text-transform:uppercase}
+.big-stat{font-family:var(--punk);font-size:clamp(80px,14vw,190px);line-height:.9;color:var(--yellow);display:block}
+.s-body{max-width:820px}
+.s-body h2{font-family:var(--punk);font-size:clamp(38px,5.5vw,76px);line-height:1;margin-bottom:18px}
+.s-body p{font-size:15px;line-height:1.7;color:rgba(250,250,250,.65);max-width:540px;margin-bottom:14px}
+.s-body p strong{color:var(--white)}
+.s-body p em{color:var(--yellow);font-style:normal}
+.punk-rule{border:none;border-top:2px solid var(--red);margin:28px 0;width:60px}
+/* TIMELINE */
+.t-year{display:flex;align-items:stretch;margin-bottom:18px;gap:14px;opacity:0;transform:translateX(-28px);transition:all .5s ease;cursor:pointer}
+.t-year.vis{opacity:1;transform:none}
+.t-label{font-family:var(--punk);font-size:34px;color:var(--grey);min-width:76px;display:flex;align-items:center;transition:color .3s}
+.t-year:hover .t-label{color:var(--yellow)}
+.t-bar-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.t-bar-bg{background:rgba(255,255,255,.06);border-radius:2px;height:22px;overflow:hidden}
+.t-bar-fill{height:100%;border-radius:2px;width:0%;transition:width 1s cubic-bezier(.16,1,.3,1);position:relative}
+.t-bar-fill::after{content:attr(data-pct);position:absolute;right:8px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:10px;font-weight:700;color:var(--black)}
+.t-meta{font-family:var(--mono);font-size:10px;color:var(--grey);letter-spacing:.04em}
+.tag{padding:1px 6px;border-radius:2px;font-size:9px;letter-spacing:.1em}
+.tag-c{background:rgba(0,255,204,.12);color:var(--cyan);border:1px solid rgba(0,255,204,.25)}
+.tag-g{background:rgba(255,224,0,.12);color:var(--yellow);border:1px solid rgba(255,224,0,.25)}
+.tag-p{background:rgba(255,26,26,.1);color:#FF8888;border:1px solid rgba(255,26,26,.25)}
+/* INSIGHT CARDS */
+.insight-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:36px}
+.ic{background:var(--dg);border:1px solid rgba(255,255,255,.07);border-radius:4px;padding:22px 18px;position:relative;overflow:hidden;transition:all .3s;cursor:default}
+.ic::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%}
+.ic.red::before{background:var(--red)}.ic.yellow::before{background:var(--yellow)}.ic.cyan::before{background:var(--cyan)}
+.ic:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.16)}
+.ic .i-num{font-family:var(--punk);font-size:48px;line-height:1;margin-bottom:6px}
+.ic.red .i-num{color:var(--red)}.ic.yellow .i-num{color:var(--yellow)}.ic.cyan .i-num{color:var(--cyan)}
+.ic .i-title{font-weight:700;font-size:13px;margin-bottom:6px}
+.ic .i-body{font-size:12px;line-height:1.6;color:rgba(250,250,250,.5)}
+/* ZINE */
+#s5{background:var(--paper);color:var(--ink)}
+.zine-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#999;border:2px solid var(--ink);max-width:740px}
+.zc{background:var(--paper);padding:26px}
+.zc.dark{background:var(--ink);color:var(--paper)}
+.zc h3{font-family:var(--punk);font-size:34px;line-height:1;margin-bottom:10px}
+.zc p{font-family:var(--mono);font-size:11px;line-height:1.7;color:rgba(10,10,10,.65)}
+.zc.dark p{color:rgba(240,237,230,.55)}
+.zc .bn{font-family:var(--punk);font-size:68px;line-height:1;display:block;margin-bottom:4px}
+/* DISTRICTS */
+#s-dist{background:#0C0C0C}
+.dist-controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px}
+.d-btn{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:7px 14px;border:1px solid rgba(255,255,255,.18);background:transparent;color:var(--grey);cursor:pointer;border-radius:2px;transition:all .2s}
+.d-btn:hover,.d-btn.active{background:var(--red);border-color:var(--red);color:var(--white)}
+.district-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;max-width:1100px}
+.dist-card{background:var(--dg);border:1px solid rgba(255,255,255,.07);border-radius:4px;padding:16px 14px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.dist-card:hover{border-color:rgba(255,26,26,.5);transform:translateY(-2px)}
+.dist-card.active-card{border-color:var(--red);background:#1F0A0A}
+.dist-card::before{content:'';position:absolute;top:0;left:0;height:2px;width:100%}
+.dist-card.alta::before{background:var(--green,#2ECC71)}
+.dist-card.media::before{background:var(--yellow)}
+.dist-card.baja::before{background:var(--red)}
+.dc-num{font-family:var(--punk);font-size:28px;color:var(--grey);line-height:1}
+.dc-name{font-family:var(--body);font-weight:700;font-size:13px;margin:4px 0 6px;color:var(--white)}
+.dc-munis{font-family:var(--mono);font-size:9px;color:var(--grey);line-height:1.5;letter-spacing:.03em}
+.dc-pct{font-family:var(--punk);font-size:22px;margin-top:8px}
+.dc-bar{height:4px;background:rgba(255,255,255,.07);border-radius:2px;margin-top:6px;overflow:hidden}
+.dc-bar-fill{height:100%;border-radius:2px;transition:width .8s ease}
+/* DETAIL PANEL */
+#dist-detail{display:none;background:var(--dg);border:1px solid rgba(255,26,26,.3);border-radius:4px;padding:24px;margin-top:16px;max-width:700px}
+#dist-detail h3{font-family:var(--punk);font-size:36px;color:var(--yellow);margin-bottom:8px}
+#dist-detail .dd-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+#dist-detail .dd-cell{background:rgba(255,255,255,.04);padding:14px;border-radius:3px}
+#dist-detail .dd-cell .lbl{font-family:var(--mono);font-size:9px;letter-spacing:.15em;color:var(--grey);text-transform:uppercase;margin-bottom:4px}
+#dist-detail .dd-cell .val{font-family:var(--punk);font-size:28px;color:var(--white)}
+/* CALCULATOR */
+.calc-box{background:var(--dg);border:1px solid rgba(255,255,255,.09);border-radius:4px;padding:28px;max-width:520px;margin-top:28px}
+.calc-box h3{font-family:var(--punk);font-size:26px;color:var(--yellow);margin-bottom:18px}
+.calc-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:14px;flex-wrap:wrap}
+.calc-row label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--grey);flex:1}
+input[type="range"]{-webkit-appearance:none;appearance:none;flex:1;height:3px;background:rgba(255,255,255,.1);border-radius:2px;outline:none}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--red);cursor:pointer;box-shadow:0 0 8px rgba(255,26,26,.5)}
+.calc-display{font-family:var(--punk);font-size:18px;color:var(--white);min-width:70px;text-align:right}
+.calc-result{border-top:1px solid rgba(255,255,255,.09);padding-top:18px;margin-top:8px}
+.calc-result .res-num{font-family:var(--punk);font-size:52px;color:var(--yellow);line-height:1}
+.calc-result .res-label{font-family:var(--mono);font-size:10px;color:var(--grey);letter-spacing:.1em;margin-top:4px}
+.calc-result .res-ctx{font-size:12px;color:rgba(250,250,250,.45);margin-top:10px;line-height:1.6}
+/* MANIFESTO */
+#s7{background:var(--red);color:var(--black);align-items:center;text-align:center}
+.manifesto-lines h2{font-family:var(--punk);font-size:clamp(48px,8vw,96px);line-height:.95;margin-bottom:20px;color:var(--black)}
+.manifesto-lines p{font-family:var(--mono);font-size:14px;line-height:1.7;color:rgba(10,10,10,.7);max-width:480px;margin:0 auto 20px}
+.strike{text-decoration:line-through;opacity:.45}
+/* TRANSPARENCY */
+#s-trans{background:#060606}
+.source-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;margin-top:28px;max-width:1000px}
+.source-card{background:var(--dg);border:1px solid rgba(255,255,255,.06);border-radius:4px;padding:18px 16px}
+.sc-badge{font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:2px 8px;border-radius:2px;display:inline-block;margin-bottom:10px}
+.sc-badge.oficial{background:rgba(0,255,204,.1);color:var(--cyan);border:1px solid rgba(0,255,204,.2)}
+.sc-badge.media{background:rgba(255,224,0,.1);color:var(--yellow);border:1px solid rgba(255,224,0,.2)}
+.sc-badge.academico{background:rgba(255,255,255,.06);color:#aaa;border:1px solid rgba(255,255,255,.12)}
+.sc-title{font-weight:700;font-size:13px;margin-bottom:6px;color:var(--white)}
+.sc-desc{font-size:11px;line-height:1.6;color:rgba(250,250,250,.45)}
+.sc-url{font-family:var(--mono);font-size:9px;color:var(--grey);margin-top:8px;word-break:break-all}
+.caution-box{background:rgba(255,224,0,.05);border:1px solid rgba(255,224,0,.2);border-radius:4px;padding:16px 18px;max-width:700px;margin-top:20px}
+.caution-box .cb-title{font-family:var(--punk);font-size:22px;color:var(--yellow);margin-bottom:8px}
+.caution-box p{font-size:12px;line-height:1.7;color:rgba(250,250,250,.5)}
+.caution-box ul{font-size:12px;line-height:1.8;color:rgba(250,250,250,.5);padding-left:16px;margin-top:6px}
+/* 2026 */
+#s8{background:var(--black);align-items:center;text-align:center}
+.countdown-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:560px;margin:28px auto}
+.cd-box{border:1px solid rgba(255,255,255,.1);padding:18px 8px;border-radius:4px;background:var(--dg)}
+.cd-num{font-family:var(--punk);font-size:44px;color:var(--yellow);display:block}
+.cd-label{font-family:var(--mono);font-size:9px;letter-spacing:.15em;color:var(--grey);text-transform:uppercase}
+/* TOOLTIP */
+#tip{position:fixed;background:#111;border:1px solid rgba(255,255,255,.1);border-radius:4px;padding:10px 14px;font-family:var(--mono);font-size:10px;color:var(--white);line-height:1.7;z-index:9998;display:none;max-width:220px;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.6)}
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+/* TOGGLE GROUP */
+.toggle-group{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.t-btn{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:7px 14px;border:1px solid rgba(255,255,255,.18);background:transparent;color:var(--grey);cursor:pointer;border-radius:2px;transition:all .2s}
+.t-btn:hover,.t-btn.active{background:var(--red);border-color:var(--red);color:var(--white)}
+/* BUBBLE */
+#bubble-area{position:relative;width:100%;max-width:640px;height:260px;margin-top:16px;border-left:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12)}
+.ax-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--grey);position:absolute;text-transform:uppercase}
+.bubble{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--punk);font-size:14px;color:var(--black);cursor:pointer;transition:all .4s cubic-bezier(.34,1.56,.64,1);transform:translate(-50%,50%)}
+.bubble:hover{transform:translate(-50%,50%) scale(1.15);z-index:10}
+footer{text-align:center;padding:20px 40px;font-size:9px;color:rgba(250,250,250,.18);font-family:var(--mono);border-top:1px solid rgba(255,255,255,.06);letter-spacing:.04em;line-height:1.8}
+@media(max-width:640px){section{padding:96px 20px 56px}#hero{padding:80px 20px}.countdown-grid{grid-template-columns:repeat(2,1fr)}.zine-grid{grid-template-columns:1fr}nav{padding:12px 20px}.nav-links{display:none}#dist-detail .dd-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<nav>
+  <div class="nav-logo">COAHUILA VOTA</div>
+  <ul class="nav-links">
+    <li><a href="#s1">El dato</a></li>
+    <li><a href="#s2">Historia</a></li>
+    <li><a href="#s-dist">Distritos</a></li>
+    <li><a href="#s6">Tú</a></li>
+    <li><a href="#s-trans">Fuentes</a></li>
+    <li><a href="#s8">2026</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-noise"></div>
+  <div class="hero-stamp">Datos verificados · IEC / INE · 2008–2026</div>
+  <h1>
+    <span class="outline">6 de cada</span><br>
+    <span class="red">10</span><br>
+    <span class="yellow">no votan</span>
+  </h1>
+  <p class="hero-sub">Cuando Coahuila elige solo diputados locales, la mayoría no va. <strong>Esto tiene consecuencias reales.</strong> 16 distritos. Datos sin filtro.</p>
+  <div class="hero-scroll">scroll<div class="scroll-arrow"></div></div>
+</section>
+
+<!-- S1 EL NÚMERO -->
+<section id="s1">
+  <div class="s-body reveal">
+    <div class="s-num">// 01 — El número que nadie discute</div>
+    <span class="big-stat glitch-num" data-text="39.1%">39.1%</span>
+    <h2>La participación<br>más baja en la<br>historia reciente</h2>
+    <hr class="punk-rule">
+    <p>En 2020, solo <strong>39 de cada 100 coahuilenses</strong> con credencial fueron a votar. Era elección de solo diputados locales —los que hacen las leyes del estado— y casi <em>nadie fue</em>.</p>
+    <p>El patrón ya existía antes de la pandemia. Y probablemente se repita en 2026.</p>
+  </div>
+  <div class="insight-grid reveal">
+    <div class="ic red"><div class="i-num">866K</div><div class="i-title">Votos en 2020</div><div class="i-body">De 2.22 millones habilitados, solo 866,311 votaron. Los otros 1.35 millones eligieron no elegir.</div></div>
+    <div class="ic yellow"><div class="i-num">+20pp</div><div class="i-title">La brecha con gubernaturas</div><div class="i-body">En elecciones con gobernador, la participación sube automáticamente 20 puntos. El Congreso local no moviliza solo.</div></div>
+    <div class="ic cyan"><div class="i-num">25</div><div class="i-title">Diputados en juego</div><div class="i-body">16 de mayoría relativa + 9 plurinominales. Aprueban el presupuesto estatal y las leyes que afectan tu vida cotidiana.</div></div>
+  </div>
+</section>
+
+<!-- S2 TIMELINE -->
+<section id="s2">
+  <div class="s-body reveal">
+    <div class="s-num">// 02 — La línea del tiempo</div>
+    <h2>18 años de datos.<br>Un patrón claro.</h2>
+    <p>Cada barra es una elección. <strong>Pasa el cursor</strong> para ver los detalles.</p>
+    <div class="toggle-group" style="margin-top:16px">
+      <button class="t-btn active" onclick="filterBars('all',this)">Todos</button>
+      <button class="t-btn" onclick="filterBars('congress',this)">Solo Congreso</button>
+      <button class="t-btn" onclick="filterBars('gov',this)">Con Gobernador</button>
+    </div>
+  </div>
+  <div id="timeline-chart"></div>
+</section>
+
+<!-- S3 PATRÓN -->
+<section id="s3" style="background:#0F0F0F">
+  <div class="s-body reveal">
+    <div class="s-num">// 03 — El patrón que el sistema no explica</div>
+    <h2>Con gobernador,<br>todo cambia.</h2>
+    <hr class="punk-rule">
+    <p>Elecciones de <em>solo Congreso</em> promedian <strong>39.5%</strong>. Con gobernador: <strong>59.8%</strong>. Son 20 puntos exactos. Consistentes desde 2008.</p>
+    <p>Eso significa que los partidos movilizan cuando hay "el premio grande". Los diputados locales quedan como el premio chico que nadie se esfuerza en mover.</p>
+  </div>
+  <div style="margin-top:36px;max-width:660px;" class="reveal">
+    <div style="font-family:var(--mono);font-size:9px;letter-spacing:.15em;color:var(--grey);margin-bottom:10px;text-transform:uppercase">Participación vs. Lista nominal — tamaño = votos emitidos</div>
+    <div id="bubble-area">
+      <div class="ax-lbl" style="bottom:-22px;left:50%;transform:translateX(-50%)">Lista nominal →</div>
+      <div class="ax-lbl" style="left:-26px;top:50%;transform:rotate(-90deg) translateX(-50%)">% Part.</div>
+    </div>
+  </div>
+</section>
+
+<!-- S4 HALLAZGOS -->
+<section id="s4">
+  <div class="s-body reveal">
+    <div class="s-num">// 04 — Cinco hallazgos que no sabías</div>
+    <h2>Los cruces<br>que duelen.</h2>
+  </div>
+  <div id="findings" style="max-width:800px;margin-top:28px"></div>
+</section>
+
+<!-- S5 ZINE -->
+<section id="s5">
+  <div class="s-body reveal">
+    <div class="s-num" style="color:#888">// 05 — Los números sin adorno</div>
+    <h2 style="color:var(--ink)">En papel,<br>para que lo recortes.</h2>
+    <hr class="punk-rule" style="border-color:#111">
+  </div>
+  <div class="zine-grid reveal" style="margin-top:24px">
+    <div class="zc dark"><span class="bn" style="color:var(--red)">6</span><h3 style="color:var(--paper)">Elecciones de Congreso</h3><p>2008 · 2011 · 2014 · 2017 · 2020 · 2023. Solo en 2011, 2017 y 2023 hubo gobernador en la boleta.</p></div>
+    <div class="zc"><span class="bn" style="color:var(--ink)">2.45M</span><h3>Electores 2026</h3><p>La lista nominal más grande en la historia de Coahuila. 4% más que en 2023.</p></div>
+    <div class="zc"><span class="bn" style="color:var(--ink)">1.34M</span><h3>Votos 2023</h3><p>Participación más alta en elección concurrente reciente. La alianza PAN-PRI-PRD ganó los 16 distritos de mayoría.</p></div>
+    <div class="zc dark"><span class="bn" style="color:var(--yellow)">+20pp</span><h3 style="color:var(--paper)">El efecto gobernador</h3><p>Cada vez que hay gubernatura en boleta, participación sube 18–22 puntos. Sin excepción desde 2008.</p></div>
+    <div class="zc"><span class="bn" style="color:var(--ink)">32,786</span><h3>Votos nulos 2023</h3><p>2.56% de los sufragios fue nulo. Más que el margen de victoria en varios distritos.</p></div>
+    <div class="zc dark"><span class="bn" style="color:var(--cyan)">~40%</span><h3 style="color:var(--paper)">Proyección 2026</h3><p>Organizaciones civiles fijan 40% como meta. Sin gobernador, ese techo suele ser el suelo.</p></div>
+  </div>
+</section>
+
+<!-- S-DIST: DISTRITOS -->
+<section id="s-dist">
+  <div class="s-body reveal">
+    <div class="s-num">// 06 — Los 16 distritos, uno por uno</div>
+    <h2>Tu distrito.<br>Tu diputado.<br>Tu elección.</h2>
+    <hr class="punk-rule">
+    <p>Coahuila se divide en <strong>16 distritos de mayoría relativa</strong>. Aquí los resultados de 2023 (última elección de Congreso) y los municipios que componen cada uno.</p>
+    <p style="font-size:12px;color:rgba(250,250,250,.35)">Barra superior: <span style="color:#2ECC71">verde = participación alta (≥60%)</span> · <span style="color:var(--yellow)">amarillo = media (50–59%)</span> · <span style="color:var(--red)">rojo = baja (&lt;50%)</span></p>
+  </div>
+  <div class="dist-controls reveal" style="margin-top:20px">
+    <button class="d-btn active" onclick="filterDist('all',this)">Todos</button>
+    <button class="d-btn" onclick="filterDist('alta',this)">Participación alta</button>
+    <button class="d-btn" onclick="filterDist('media',this)">Media</button>
+    <button class="d-btn" onclick="filterDist('baja',this)">Baja</button>
+    <button class="d-btn" onclick="filterDist('saltillo',this)">Saltillo</button>
+    <button class="d-btn" onclick="filterDist('torreon',this)">Torreón</button>
+  </div>
+  <div class="district-grid reveal" id="distGrid"></div>
+  <div id="dist-detail" class="reveal"></div>
+</section>
+
+<!-- S6 CALCULADORA -->
+<section id="s6" style="background:#0A0A0A">
+  <div class="s-body reveal">
+    <div class="s-num">// 07 — ¿Qué pasa si TÚ votas?</div>
+    <h2>Tu voto<br>multiplicado.</h2>
+    <p>Mueve los sliders. Ve cómo cambia la proyección de 2026.</p>
+  </div>
+  <div class="calc-box reveal">
+    <h3>Simulador 2026</h3>
+    <div class="calc-row">
+      <label>Tus contactos que podrían votar</label>
+      <input type="range" id="rC" min="0" max="200" value="50" oninput="calcU()">
+      <div class="calc-display" id="dC">50</div>
+    </div>
+    <div class="calc-row">
+      <label>% que lograrías convencer</label>
+      <input type="range" id="rV" min="0" max="100" value="30" oninput="calcU()">
+      <div class="calc-display" id="dV">30%</div>
+    </div>
+    <div class="calc-row">
+      <label>Participación base esperada</label>
+      <input type="range" id="rB" min="35" max="65" value="40" oninput="calcU()">
+      <div class="calc-display" id="dB">40%</div>
+    </div>
+    <div class="calc-result">
+      <div class="res-num" id="rRes">982,000</div>
+      <div class="res-label">votos totales proyectados en Coahuila</div>
+      <div class="res-ctx" id="rCtx"></div>
+    </div>
+  </div>
+</section>
+
+<!-- S7 MANIFIESTO -->
+<section id="s7">
+  <div class="manifesto-lines reveal">
+    <h2>El<br>Congreso<br><span class="strike">No</span><br>Importa.</h2>
+    <hr class="punk-rule" style="margin:20px auto;border-color:rgba(10,10,10,.3)">
+    <p>Eso dicen los números cuando nadie va a votar. No con palabras. Con ausencia.</p>
+    <p>Pero el Congreso aprueba el presupuesto de salud, educación y seguridad. Fiscaliza al gobernador. Puede legislar o simplemente ignorar por tres años.</p>
+    <p style="font-weight:700;color:var(--black);font-size:16px">La apatía es una elección. Solo que la haces a favor de quien ya tiene el poder.</p>
+  </div>
+</section>
+
+<!-- S-TRANS: TRANSPARENCIA -->
+<section id="s-trans">
+  <div class="s-body reveal">
+    <div class="s-num">// 08 — De dónde viene cada dato</div>
+    <h2>Transparencia<br>radical.</h2>
+    <hr class="punk-rule">
+    <p>Todo lo que aparece en esta página tiene una fuente verificable. Aquí está, dato por dato.</p>
+  </div>
+  <div class="caution-box reveal">
+    <div class="cb-title">⚠ Lo que sabemos y lo que estimamos</div>
+    <p>Distinguimos claramente entre datos oficiales y estimaciones:</p>
+    <ul>
+      <li><strong>Datos oficiales:</strong> participación 2020 (IEC/INE), lista nominal 2020 y 2023 (INE), resultados por distrito 2023 (IEC PREP/cómputo), municipios por distrito (IEC).</li>
+      <li><strong>Datos del gráfico histórico (2008, 2011, 2014, 2017):</strong> tomados del gráfico comparativo publicado en el Reporte Electoral Integralia 2020, que cita como fuente al IEC. No son datos crudos del IEC sino una compilación académica.</li>
+      <li><strong>Estimaciones:</strong> lista nominal 2008/2011/2014/2017 son aproximadas (±2%) basadas en el crecimiento proporcional. Los votos emitidos 2008/2011/2014/2017 se calculan multiplicando % participación × lista nominal estimada.</li>
+      <li><strong>Proyección 2026:</strong> basada en declaraciones del Consejo Cívico de Instituciones de Coahuila (Posta.com.mx, marzo 2026), no en modelo estadístico propio.</li>
+    </ul>
+  </div>
+  <div class="source-grid reveal" id="sourceGrid"></div>
+</section>
+
+<!-- S8 2026 -->
+<section id="s8">
+  <div class="reveal" style="max-width:600px">
+    <div class="s-num" style="text-align:center">// 09 — Lo que viene</div>
+    <h2 style="font-family:var(--punk);font-size:clamp(56px,9vw,110px);color:var(--yellow);line-height:.9;margin-bottom:20px;text-align:center">7 JUN<br>2026</h2>
+    <p style="color:rgba(250,250,250,.55);font-size:14px;max-width:380px;margin:0 auto 28px;text-align:center"><strong style="color:var(--white)">LXIV Legislatura del Congreso de Coahuila.</strong> 25 diputados. 16 distritos. 2,454,816 coahuilenses habilitados. Solo Congreso, sin gobernador.</p>
+    <div class="countdown-grid" id="cdGrid">
+      <div class="cd-box"><span class="cd-num" id="cd-d">—</span><div class="cd-label">Días</div></div>
+      <div class="cd-box"><span class="cd-num" id="cd-h">—</span><div class="cd-label">Horas</div></div>
+      <div class="cd-box"><span class="cd-num" id="cd-m">—</span><div class="cd-label">Minutos</div></div>
+      <div class="cd-box"><span class="cd-num" id="cd-s">—</span><div class="cd-label">Segundos</div></div>
+    </div>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--grey)">Meta org. civiles: <span style="color:var(--yellow);font-weight:700">40%</span></div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--grey)">Promedio histórico solo-congreso: <span style="color:var(--red);font-weight:700">39.5%</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  COAHUILA VOTA · Datos electorales sin filtro · Elaborado con información pública oficial al 19 de mayo de 2026<br>
+  IEC · INE · Integralia · Wikipedia · Vanguardia MX · Siglo de Torreón · Milenio · Telediario · Posta.com.mx
+</footer>
+
+<div id="tip"></div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════
+const ELEC = [
+  {year:2008,date:"6 jul 2008",  type:"congress",leg:"LVI",  nominal:1750000, votes:698250,  pct:39.9,abs:60.1,nulls:null,
+   note:"Solo diputados locales.",ctx:"Primera elección del ciclo moderno IEC. Base comparativa."},
+  {year:2011,date:"5 jun 2011",  type:"gov",     leg:"LVII", nominal:1883000, votes:1157063, pct:61.4,abs:38.6,nulls:null,
+   note:"Gobernador + Congreso. Electo: Rubén Moreira (PRI).",ctx:"Pico histórico de participación."},
+  {year:2014,date:"6 jul 2014",  type:"congress",leg:"LX",   nominal:2010000, votes:795960,  pct:39.6,abs:60.4,nulls:null,
+   note:"Solo diputados locales.",ctx:"Primer Congreso con mayoría femenina tras resolución TRIFE."},
+  {year:2017,date:"4 jun 2017",  type:"gov",     leg:"LXI",  nominal:2090000, votes:1277060, pct:61.1,abs:38.9,nulls:null,
+   note:"Gobernador + Congreso + 38 Ayuntamientos. Electo: Riquelme (PRI).",ctx:"Triple boleta. Elección más disputada mediáticamente."},
+  {year:2020,date:"18 oct 2020", type:"congress",leg:"LXII", nominal:2220746, votes:866311,  pct:39.1,abs:60.9,nulls:null,
+   note:"Solo Congreso. Aplazada a octubre por COVID-19.",ctx:"Mínimo histórico. Pandemia + solo diputados."},
+  {year:2023,date:"4 jun 2023",  type:"gov",     leg:"LXIII",nominal:2355025, votes:1343200, pct:57.1,abs:42.9,nulls:32786,
+   note:"Gobernador + Congreso. Electo: Manolo Jiménez (PAN-PRI-PRD).",ctx:"1,288,313 votos al Congreso. 32,786 nulos (2.56%)."},
+  {year:2026,date:"7 jun 2026",  type:"proj",    leg:"LXIV", nominal:2454816, votes:null,    pct:40.0,abs:60.0,nulls:null,
+   note:"Proyección ~40%. Solo Congreso. LXIV Legislatura.",ctx:"Lista nominal más alta. Meta: superar 40%.",proj:true},
+];
+
+// 16 DISTRITOS — datos de participación y ganador 2023 vienen del PREP/cómputo IEC
+// Municipios: IEC cartografía + Milenio/Siglo de Torreón mayo 2026 (confirmados)
+// Participación por distrito: Wikipedia Coahuila 2023 (extraída del PREP IEC)
+const DISTRITOS = [
+  {id:1,  cab:"Acuña",         munis:["Acuña","Jiménez","Zaragoza"],
+   pct23:52.25, ganador:"PAN-PRI-PRD", pctGan:44.14, zona:"norte",  nivel:"media",
+   votos23:null, notas:"Frontera con Texas. Zona industrial y agrícola."},
+  {id:2,  cab:"Piedras Negras",munis:["Piedras Negras"],
+   pct23:51.19, ganador:"PAN-PRI-PRD", pctGan:51.56, zona:"norte",  nivel:"media",
+   votos23:null, notas:"Solo Piedras Negras. Ciudad fronteriza con Eagle Pass, TX."},
+  {id:3,  cab:"Sabinas",       munis:["Sabinas","San Juan de Sabinas","Morelos","Allende","Nava","Guerrero","Villa Unión","Hidalgo","Juárez","Progreso","Escobedo"],
+   pct23:55.16, ganador:"PAN-PRI-PRD", pctGan:46.93, zona:"carbonífera",nivel:"media",
+   votos23:null, notas:"Región Carbonífera. Históricamente minera."},
+  {id:4,  cab:"San Pedro",     munis:["Abasolo","Candela","Castaños","Cuatro Ciénegas","Lamadrid","Monclova","Sacramento","San Pedro"],
+   pct23:64.49, ganador:"PAN-PRI-PRD", pctGan:51.01, zona:"centro",  nivel:"alta",
+   votos23:null, notas:"Participación más alta del estado en 2023. Zona agrícola y ganadera."},
+  {id:5,  cab:"Monclova",      munis:["Monclova"],
+   pct23:57.36, ganador:"PAN-PRI-PRD", pctGan:47.94, zona:"centro",  nivel:"media",
+   votos23:null, notas:"Solo Monclova. Ciudad siderúrgica (AHMSA). Importante base obrera."},
+  {id:6,  cab:"Frontera",      munis:["Frontera","Múzquiz","Nadadores","Ocampo","San Buenaventura","Sierra Mojada"],
+   pct23:54.56, ganador:"PAN-PRI-PRD", pctGan:50.11, zona:"norte",   nivel:"media",
+   votos23:null, notas:"Región mixta. Múzquiz tiene presencia histórica del carbón."},
+  {id:7,  cab:"Matamoros",     munis:["Francisco I. Madero","Matamoros","Torreón","Viesca"],
+   pct23:66.92, ganador:"PAN-PRI-PRD", pctGan:51.59, zona:"laguna",  nivel:"alta",
+   votos23:null, notas:"Participación más alta del estado en 2023. Zona metropolitana de La Laguna."},
+  {id:8,  cab:"Torreón",       munis:["Torreón (zona norte)"],
+   pct23:59.83, ganador:"PAN-PRI-PRD", pctGan:61.52, zona:"laguna",  nivel:"media",
+   votos23:null, notas:"Zona norte de Torreón. Mayor porcentaje ganador de la alianza: 61.52%."},
+  {id:9,  cab:"Torreón",       munis:["Torreón (zona oriente)"],
+   pct23:61.65, ganador:"PAN-PRI-PRD", pctGan:57.66, zona:"laguna",  nivel:"alta",
+   votos23:null, notas:"Zona oriente de Torreón. Segunda participación más alta en La Laguna."},
+  {id:10, cab:"Torreón",       munis:["Torreón (zona sur)"],
+   pct23:60.83, ganador:"PAN-PRI-PRD", pctGan:53.68, zona:"laguna",  nivel:"alta",
+   votos23:null, notas:"Zona sur de Torreón. Cuatro distritos de Torreón en total."},
+  {id:11, cab:"Torreón",       munis:["Torreón (zona poniente)"],
+   pct23:51.88, ganador:"PAN-PRI-PRD", pctGan:54.04, zona:"laguna",  nivel:"media",
+   votos23:null, notas:"Zona poniente de Torreón. Menor participación de los 4 distritos laguneros."},
+  {id:12, cab:"Ramos Arizpe",  munis:["Arteaga","General Cepeda","Parras","Ramos Arizpe"],
+   pct23:55.05, ganador:"PAN-PRI-PRD", pctGan:55.94, zona:"sureste", nivel:"media",
+   votos23:null, notas:"Ramos Arizpe: zona industrial automotriz (General Motors, BMW). De las más dinámicas."},
+  {id:13, cab:"Saltillo",      munis:["Saltillo (zona norte)"],
+   pct23:59.48, ganador:"PAN-PRI-PRD", pctGan:55.34, zona:"saltillo",nivel:"media",
+   votos23:null, notas:"Zona norte de Saltillo. Capital del estado, sede del Palacio Legislativo."},
+  {id:14, cab:"Saltillo",      munis:["Saltillo (zona oriente)"],
+   pct23:52.50, ganador:"PAN-PRI-PRD", pctGan:56.02, zona:"saltillo",nivel:"media",
+   votos23:null, notas:"Zona oriente de Saltillo. Cuatro distritos en la capital."},
+  {id:15, cab:"Saltillo",      munis:["Saltillo (zona poniente)"],
+   pct23:51.97, ganador:"PAN-PRI-PRD", pctGan:56.24, zona:"saltillo",nivel:"media",
+   votos23:null, notas:"Zona poniente de Saltillo. Menor participación de los 4 distritos de la capital."},
+  {id:16, cab:"Saltillo",      munis:["Saltillo (zona sur)"],
+   pct23:57.19, ganador:"PAN-PRI-PRD", pctGan:50.80, zona:"saltillo",nivel:"media",
+   votos23:null, notas:"Zona sur de Saltillo. Candidata de Morena-PT: Alejandra Salazar (2026)."},
+];
+
+const SOURCES = [
+  {badge:"oficial",title:"Instituto Electoral de Coahuila (IEC)",
+   desc:"Organismo autónomo estatal responsable de organizar elecciones locales. Fuente de resultados por distrito 2023, cartografía, y datos del PEL 2025-2026.",
+   url:"iecoah.org.mx / iec.org.mx/v1"},
+  {badge:"oficial",title:"Instituto Nacional Electoral (INE)",
+   desc:"Fuente de listas nominales, datos de participación del conteo rápido 2023, y datos de padrón electoral.",
+   url:"ine.mx · Central Electoral · ine.mx/voto-y-elecciones/elecciones-2023"},
+  {badge:"oficial",title:"INE — PREP 2023 Coahuila",
+   desc:"Resultados preliminares por casilla y distrito. Datos de votos por partido en los 16 distritos con 99.77% de actas capturadas.",
+   url:"prep2023.ine.mx (archivado)"},
+  {badge:"academico",title:"Reporte Electoral Integralia 2020",
+   desc:"Compilación de datos históricos de participación 2008–2020 para Coahuila, citando como fuente al IEC. Usado para el gráfico comparativo histórico.",
+   url:"integralia.com.mx/web/wp-content/uploads/2020/11/Reporte-Electoral-Integralia-2020.pdf"},
+  {badge:"media",title:"Wikipedia — Elecciones Coahuila 2023",
+   desc:"Artículo con resultados por distrito (% participación y % ganador) extraídos del PREP IEC. Usado para datos de participación distrital 2023.",
+   url:"es.wikipedia.org/wiki/Elecciones_estatales_de_Coahuila_de_2023"},
+  {badge:"media",title:"Wikipedia — Elecciones Coahuila 2026",
+   desc:"Artículo con datos del proceso en curso: coaliciones, candidatos registrados, municipios por distrito.",
+   url:"es.wikipedia.org/wiki/Elecciones_estatales_de_Coahuila_de_2026"},
+  {badge:"media",title:"Milenio — Mapa Electoral Coahuila 2026",
+   desc:"Lista de municipios por distrito según datos del IEC. Usada para verificar composición territorial de los 16 distritos.",
+   url:"milenio.com/elecciones/mapa-electoral-coahuila-municipios-abarcan-16-distritos"},
+  {badge:"media",title:"El Siglo de Torreón — Distritos 2026",
+   desc:"Verificación cruzada de la lista oficial de municipios por distrito, citando al IEC.",
+   url:"elsiglodetorreon.com.mx (mayo 2026)"},
+  {badge:"media",title:"Posta.com.mx — Proyección 2026",
+   desc:"Declaraciones del Consejo Cívico de Instituciones de Coahuila sobre meta de participación de 40% para junio 2026.",
+   url:"posta.com.mx · marzo 2026"},
+  {badge:"media",title:"Vanguardia MX — Arranque de campañas 2026",
+   desc:"Candidatos por distrito, inicio formal de campañas el 5 de mayo 2026. Verificación de candidatos Morena-PT por distrito.",
+   url:"vanguardia.com.mx · mayo 2026"},
+  {badge:"media",title:"Telediario — Candidatos por distrito 2026",
+   desc:"Lista completa de candidatos por los principales partidos en los 16 distritos locales de Coahuila para la jornada del 7 de junio.",
+   url:"telediario.mx · mayo 2026"},
+  {badge:"academico",title:"Vanguardia MX — Abstencionismo en Coahuila",
+   desc:"Datos históricos de abstención incluyendo el 62.11% de 1988 (presidencial). Referencia al ranking nacional de estados con menor participación.",
+   url:"vanguardia.com.mx/articulo/abstencionismo-fenomeno-que-pega-coahuila"},
+];
+
+// ═══════════════════════════════════════════════════
+// UTILIDADES
+// ═══════════════════════════════════════════════════
+const fmt  = n => n != null ? n.toLocaleString('es-MX') : '—';
+const fmtp = v => v != null ? v.toFixed(1)+'%' : '—';
+const tip  = document.getElementById('tip');
+function showTip(e, html){tip.style.display='block';tip.innerHTML=html}
+function moveTip(e){tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-6)+'px'}
+function hideTip(){tip.style.display='none'}
+
+// ═══════════════════════════════════════════════════
+// PROGRESS
+// ═══════════════════════════════════════════════════
+window.addEventListener('scroll',()=>{
+  document.getElementById('progress').style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%';
+});
+
+// ═══════════════════════════════════════════════════
+// REVEAL
+// ═══════════════════════════════════════════════════
+const revObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
+
+// ═══════════════════════════════════════════════════
+// TIMELINE
+// ═══════════════════════════════════════════════════
+const tlC=document.getElementById('timeline-chart');
+ELEC.forEach((d,i)=>{
+  const isG=d.type==='gov', isP=d.type==='proj';
+  const col=isG?'#FFE000':isP?'rgba(255,26,26,.7)':'#00FFCC';
+  const tagCls=isG?'tag-g':isP?'tag-p':'tag-c';
+  const tagTxt=isG?'CON GOBERNADOR':isP?'PROYECCIÓN':'SOLO CONGRESO';
+  const row=document.createElement('div');
+  row.className='t-year'; row.dataset.type=d.type;
+  row.innerHTML=`<div class="t-label">${d.year}</div>
+    <div class="t-bar-wrap">
+      <div class="t-bar-bg">
+        <div class="t-bar-fill" style="background:${col};width:0%" data-pct="${fmtp(d.pct)}" data-target="${d.pct}"></div>
+      </div>
+      <div class="t-meta"><span class="tag ${tagCls}">${tagTxt}</span>&nbsp;${fmt(d.votes)} votos&nbsp;·&nbsp;LN:${fmt(d.nominal)}</div>
+    </div>`;
+  row.addEventListener('mouseenter',e=>showTip(e,`<strong style="color:${col}">${d.year} — ${d.leg}</strong><br>
+    Participación: <b>${fmtp(d.pct)}</b><br>Abstención: ${fmtp(d.abs)}<br>
+    Votos emitidos: ${fmt(d.votes)}<br>Lista nominal: ${fmt(d.nominal)}<br>
+    ${d.nulls?`Nulos: ${fmt(d.nulls)}<br>`:''}
+    <span style="color:#555;font-size:10px">${d.note}</span>`));
+  row.addEventListener('mousemove',moveTip);
+  row.addEventListener('mouseleave',hideTip);
+  tlC.appendChild(row);
+});
+const barObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){
+    e.target.classList.add('vis');
+    const f=e.target.querySelector('.t-bar-fill');
+    if(f)setTimeout(()=>{f.style.width=f.dataset.target+'%'},100);
+  }})},{threshold:.1});
+document.querySelectorAll('.t-year').forEach(el=>barObs.observe(el));
+
+function filterBars(type,btn){
+  document.querySelectorAll('.t-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.t-year').forEach(r=>{
+    r.style.display=(type==='all'||r.dataset.type===type)?'flex':'none';
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// BUBBLES
+// ═══════════════════════════════════════════════════
+(function(){
+  const area=document.getElementById('bubble-area');
+  const W=area.offsetWidth||600,H=258,pL=12,pB=12;
+  const minN=1700000,maxN=2500000,minP=35,maxP=65,maxV=1350000;
+  ELEC.forEach(d=>{
+    if(!d.votes)return;
+    const xP=(d.nominal-minN)/(maxN-minN);
+    const yP=(d.pct-minP)/(maxP-minP);
+    const sz=Math.sqrt(d.votes/maxV)*60+20;
+    const x=pL+xP*(W-pL*2-40);
+    const y=H-pB-yP*(H-pB*2-28);
+    const isG=d.type==='gov',col=isG?'#FFE000':'#00FFCC';
+    const b=document.createElement('div');
+    b.className='bubble';
+    b.style.cssText=`left:${x}px;bottom:${H-y}px;width:${sz}px;height:${sz}px;background:${col};font-size:${Math.max(10,sz/4)}px`;
+    b.textContent=d.year.toString().slice(2);
+    b.addEventListener('mouseenter',e=>showTip(e,`<strong style="color:${col}">${d.year}</strong><br>
+      Participación: <b>${fmtp(d.pct)}</b><br>Votos: ${fmt(d.votes)}<br>LN: ${fmt(d.nominal)}<br>
+      <span style="color:#555;font-size:10px">${d.type==='gov'?'Con gobernador':'Solo Congreso'}</span>`));
+    b.addEventListener('mousemove',moveTip);
+    b.addEventListener('mouseleave',hideTip);
+    area.appendChild(b);
+  });
+})();
+
+// ═══════════════════════════════════════════════════
+// FINDINGS
+// ═══════════════════════════════════════════════════
+const FINDS=[
+  {num:"20pp",col:"#FFE000",title:"El 'efecto gobernador'",
+   body:"Sin excepción, cada elección con gubernatura en boleta produce 20 puntos más de participación. 2011: 61.4%. 2017: 61.1%. 2023: 57.1%. Solo Congreso: siempre ronda 39–40%. El Congreso local no puede movilizar solo. Dato consistente durante 15 años."},
+  {num:"3×",col:"#00FFCC",title:"El abstencionismo tiene costo fiscal",
+   body:"Los partidos reciben financiamiento proporcional al padrón, no a la participación real. En 2020, con 60.9% de abstención, los partidos cobraron financiamiento público calculado sobre 2.22M electores aunque solo votaron 866K. El no-voto financia la política que se critica."},
+  {num:"2.56%",col:"#FF1A1A",title:"Los votos nulos que cambian distritos",
+   body:"En 2023, 32,786 boletas fueron anuladas (2.56%). En al menos 8 de los 16 distritos, el margen entre la alianza ganadora y el segundo lugar fue menor al porcentaje de votos nulos del distrito. En una elección más cerrada, los nulos pueden definir ganadores."},
+  {num:"+40%",col:"#FFE000",title:"El padrón crece, la participación no",
+   body:"Entre 2008 y 2026, la lista nominal de Coahuila creció 40%: de ~1.75M a 2.45M electores. Pero el porcentaje de participación en elecciones de solo-Congreso es casi idéntico: 39.9% (2008) → 39.6% (2014) → 39.1% (2020). Más gente puede votar, pero la misma proporción no va."},
+  {num:"D4+D7",col:"#00FFCC",title:"Los distritos que más participan",
+   body:"En 2023, los distritos 4 (San Pedro, 64.49%) y 7 (Matamoros-Torreón, 66.92%) tuvieron la participación más alta. Ambos son mixtos: combinan área rural con núcleos urbanos medianos, lo que sugiere que la movilización es más efectiva fuera de las metrópolis."},
+];
+const fC=document.getElementById('findings');
+FINDS.forEach((f,i)=>{
+  const card=document.createElement('div');
+  card.style.cssText=`display:flex;gap:20px;align-items:flex-start;padding:18px 0;border-bottom:1px solid rgba(255,255,255,.05);opacity:0;transform:translateX(-18px);transition:all .5s ease ${i*.1}s`;
+  card.innerHTML=`<div style="font-family:'Bebas Neue',sans-serif;font-size:48px;line-height:1;color:${f.col};min-width:86px;flex-shrink:0">${f.num}</div>
+    <div><div style="font-weight:700;font-size:14px;margin-bottom:6px;color:#fafafa">${f.title}</div>
+    <div style="font-size:12px;line-height:1.7;color:rgba(250,250,250,.5)">${f.body}</div></div>`;
+  const ob=new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting){card.style.opacity='1';card.style.transform='none';ob.disconnect()}})},{threshold:.2});
+  ob.observe(card);
+  fC.appendChild(card);
+});
+
+// ═══════════════════════════════════════════════════
+// DISTRICTS
+// ═══════════════════════════════════════════════════
+const dGrid=document.getElementById('distGrid');
+const dDetail=document.getElementById('dist-detail');
+let activeDistId=null;
+
+function pctColor(p){return p>=60?'#2ECC71':p>=50?'#FFE000':'#FF1A1A'}
+
+DISTRITOS.forEach(d=>{
+  const col=pctColor(d.pct23);
+  const card=document.createElement('div');
+  card.className=`dist-card ${d.nivel}`;
+  card.dataset.zona=d.zona; card.dataset.nivel=d.nivel;
+  card.innerHTML=`<div class="dc-num">D${String(d.id).padStart(2,'0')}</div>
+    <div class="dc-name">${d.cab}</div>
+    <div class="dc-munis">${d.munis.slice(0,3).join(' · ')}${d.munis.length>3?` +${d.munis.length-3}`:''}
+    </div>
+    <div class="dc-pct" style="color:${col}">${fmtp(d.pct23)}</div>
+    <div class="dc-bar"><div class="dc-bar-fill" style="width:${d.pct23}%;background:${col}"></div></div>`;
+  card.addEventListener('click',()=>openDist(d,card));
+  card.addEventListener('mouseenter',e=>showTip(e,`<strong>D${d.id} — ${d.cab}</strong><br>
+    Participación 2023: <b style="color:${col}">${fmtp(d.pct23)}</b><br>
+    Ganador: ${d.ganador} (${fmtp(d.pctGan)})<br>
+    <span style="color:#555;font-size:9px">${d.munis.join(', ')}</span>`));
+  card.addEventListener('mousemove',moveTip);
+  card.addEventListener('mouseleave',hideTip);
+  dGrid.appendChild(card);
+});
+
+function openDist(d,card){
+  document.querySelectorAll('.dist-card').forEach(c=>c.classList.remove('active-card'));
+  const col=pctColor(d.pct23);
+  if(activeDistId===d.id){
+    activeDistId=null; dDetail.style.display='none'; return;
+  }
+  activeDistId=d.id; card.classList.add('active-card');
+  dDetail.style.display='block';
+  dDetail.innerHTML=`<h3>Distrito ${d.id} — ${d.cab}</h3>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--grey);letter-spacing:.1em;margin-bottom:12px">
+      ${d.munis.join(' · ')}
+    </div>
+    <p style="font-size:12px;color:rgba(250,250,250,.5);line-height:1.6;margin-bottom:4px">${d.notas}</p>
+    <div class="dd-grid">
+      <div class="dd-cell"><div class="lbl">Participación 2023</div><div class="val" style="color:${col}">${fmtp(d.pct23)}</div></div>
+      <div class="dd-cell"><div class="lbl">Ganador 2023</div><div class="val" style="font-size:16px;color:#aaa">${d.ganador}</div></div>
+      <div class="dd-cell"><div class="lbl">% del ganador</div><div class="val">${fmtp(d.pctGan)}</div></div>
+    </div>
+    <div style="margin-top:14px;font-family:var(--mono);font-size:9px;color:rgba(250,250,250,.25);letter-spacing:.08em">
+      Fuente: Wikipedia Coahuila 2023 (datos del PREP/cómputo IEC) · Todos los distritos ganados por la Alianza Ciudadana (PAN-PRI-PRD)
+    </div>`;
+  dDetail.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function filterDist(tipo,btn){
+  document.querySelectorAll('.d-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  activeDistId=null; dDetail.style.display='none';
+  document.querySelectorAll('.dist-card').forEach(c=>{
+    c.classList.remove('active-card');
+    let show=false;
+    if(tipo==='all') show=true;
+    else if(tipo==='alta') show=c.dataset.nivel==='alta';
+    else if(tipo==='media') show=c.dataset.nivel==='media';
+    else if(tipo==='baja') show=c.dataset.nivel==='baja';
+    else if(tipo==='saltillo') show=c.dataset.zona==='saltillo';
+    else if(tipo==='torreon') show=c.dataset.zona==='laguna';
+    c.style.display=show?'':'none';
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// CALCULATOR
+// ═══════════════════════════════════════════════════
+const NOM26=2454816;
+function calcU(){
+  const co=+document.getElementById('rC').value;
+  const vv=+document.getElementById('rV').value;
+  const ba=+document.getElementById('rB').value;
+  document.getElementById('dC').textContent=co;
+  document.getElementById('dV').textContent=vv+'%';
+  document.getElementById('dB').textContent=ba+'%';
+  const base=Math.round(NOM26*ba/100);
+  const extra=Math.round(co*vv/100);
+  const total=base+extra;
+  const totP=(total/NOM26*100).toFixed(1);
+  document.getElementById('rRes').textContent=total.toLocaleString('es-MX');
+  let ctx='';
+  if(ba<=39.5) ctx=`${totP}% — dentro del piso histórico de solo-Congreso. El patrón se repetiría.`;
+  else if(ba<=49) ctx=`${totP}% rompería el techo histórico de solo-Congreso. Inédito sin gubernatura.`;
+  else ctx=`${totP}% entraría en territorio de elecciones con gobernador. Sin precedente para solo-Congreso.`;
+  document.getElementById('rCtx').textContent=ctx;
+}
+calcU();
+
+// ═══════════════════════════════════════════════════
+// SOURCES
+// ═══════════════════════════════════════════════════
+const sG=document.getElementById('sourceGrid');
+SOURCES.forEach(s=>{
+  const card=document.createElement('div');
+  card.className='source-card';
+  card.innerHTML=`<div class="sc-badge ${s.badge}">${s.badge.toUpperCase()}</div>
+    <div class="sc-title">${s.title}</div>
+    <div class="sc-desc">${s.desc}</div>
+    <div class="sc-url">${s.url}</div>`;
+  sG.appendChild(card);
+});
+
+// ═══════════════════════════════════════════════════
+// COUNTDOWN
+// ═══════════════════════════════════════════════════
+function tick(){
+  const target=new Date('2026-06-07T08:00:00-06:00');
+  const diff=target-new Date();
+  if(diff<=0){['d','h','m','s'].forEach(k=>document.getElementById('cd-'+k).textContent='00');return}
+  document.getElementById('cd-d').textContent=String(Math.floor(diff/86400000)).padStart(2,'0');
+  document.getElementById('cd-h').textContent=String(Math.floor(diff%86400000/3600000)).padStart(2,'0');
+  document.getElementById('cd-m').textContent=String(Math.floor(diff%3600000/60000)).padStart(2,'0');
+  document.getElementById('cd-s').textContent=String(Math.floor(diff%60000/1000)).padStart(2,'0');
+}
+tick(); setInterval(tick,1000);
+</script>
+</body>
+</html>
